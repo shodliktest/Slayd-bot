@@ -8,7 +8,8 @@ from typing import Dict, List, Optional
 import aiohttp
 
 from config import (
-    OPENAI_API_KEY, OPENAI_MODEL, GEMINI_API_KEY, AI_PROVIDER,
+    OPENAI_API_KEY, OPENAI_MODEL, GEMINI_API_KEY, 
+    GROQ_API_KEY, GROQ_MODEL, AI_PROVIDER,
     SLIDE_GENERATION_PROMPT_UZ, ESSAY_GENERATION_PROMPT_UZ,
     TEST_GENERATION_PROMPT_UZ, REFERAT_GENERATION_PROMPT_UZ
 )
@@ -23,6 +24,7 @@ class AIGenerator:
         self.provider = AI_PROVIDER
         self.openai_key = OPENAI_API_KEY
         self.gemini_key = GEMINI_API_KEY
+        self.groq_key = GROQ_API_KEY
         self.model = OPENAI_MODEL
     
     async def generate_slides(
@@ -39,6 +41,8 @@ class AIGenerator:
         try:
             if self.provider == "openai":
                 response = await self._call_openai(prompt, json_mode=True)
+            elif self.provider == "groq":
+                response = await self._call_groq(prompt, json_mode=True)
             else:
                 response = await self._call_gemini(prompt, json_mode=True)
             
@@ -70,6 +74,8 @@ class AIGenerator:
         try:
             if self.provider == "openai":
                 essay = await self._call_openai(prompt)
+            elif self.provider == "groq":
+                essay = await self._call_groq(prompt)
             else:
                 essay = await self._call_gemini(prompt)
             
@@ -93,6 +99,8 @@ class AIGenerator:
         try:
             if self.provider == "openai":
                 response = await self._call_openai(prompt, json_mode=True)
+            elif self.provider == "groq":
+                response = await self._call_groq(prompt, json_mode=True)
             else:
                 response = await self._call_gemini(prompt, json_mode=True)
             
@@ -118,6 +126,8 @@ class AIGenerator:
         try:
             if self.provider == "openai":
                 referat = await self._call_openai(prompt)
+            elif self.provider == "groq":
+                referat = await self._call_groq(prompt)
             else:
                 referat = await self._call_gemini(prompt)
             
@@ -156,6 +166,8 @@ To'liq akademik formatda yoz.
         try:
             if self.provider == "openai":
                 content = await self._call_openai(prompt)
+            elif self.provider == "groq":
+                content = await self._call_groq(prompt)
             else:
                 content = await self._call_gemini(prompt)
             
@@ -200,6 +212,8 @@ Ilmiy uslubda, to'liq akademik formatda yoz.
         try:
             if self.provider == "openai":
                 content = await self._call_openai(prompt)
+            elif self.provider == "groq":
+                content = await self._call_groq(prompt)
             else:
                 content = await self._call_gemini(prompt)
             
@@ -241,6 +255,8 @@ Ilmiy uslub, akademik format, manba ko'rsatish bilan yoz.
         try:
             if self.provider == "openai":
                 content = await self._call_openai(prompt)
+            elif self.provider == "groq":
+                content = await self._call_groq(prompt)
             else:
                 content = await self._call_gemini(prompt)
             
@@ -282,6 +298,8 @@ Ixcham, aniq, ilmiy uslubda yoz.
         try:
             if self.provider == "openai":
                 content = await self._call_openai(prompt)
+            elif self.provider == "groq":
+                content = await self._call_groq(prompt)
             else:
                 content = await self._call_gemini(prompt)
             
@@ -349,6 +367,37 @@ Ixcham, aniq, ilmiy uslubda yoz.
                 
                 data = await response.json()
                 return data['candidates'][0]['content']['parts'][0]['text']
+    
+    async def _call_groq(self, prompt: str, json_mode: bool = False) -> str:
+        """Call Groq API (Lightning fast!)"""
+        
+        url = "https://api.groq.com/openai/v1/chat/completions"
+        headers = {
+            "Authorization": f"Bearer {self.groq_key}",
+            "Content-Type": "application/json"
+        }
+        
+        payload = {
+            "model": GROQ_MODEL,
+            "messages": [
+                {"role": "system", "content": "Sen professional akademik kontent yaratuvchisan."},
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.7,
+            "max_tokens": 8000  # Groq supports up to 32k!
+        }
+        
+        if json_mode:
+            payload["response_format"] = {"type": "json_object"}
+        
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, headers=headers, json=payload) as response:
+                if response.status != 200:
+                    error_text = await response.text()
+                    raise Exception(f"Groq API error: {response.status} - {error_text}")
+                
+                data = await response.json()
+                return data['choices'][0]['message']['content']
 
 
 # Global generator instance

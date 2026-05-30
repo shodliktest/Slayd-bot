@@ -23,8 +23,12 @@ OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 # Google Gemini API key (alternative)
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 
-# Choose AI provider: "openai" or "gemini"
-AI_PROVIDER = os.getenv("AI_PROVIDER", "openai")
+# Groq API key (fast and free!)
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-70b-versatile")
+
+# Choose AI provider: "openai", "gemini", or "groq"
+AI_PROVIDER = os.getenv("AI_PROVIDER", "groq")
 
 # ============================================================================
 # WEB SEARCH SETTINGS

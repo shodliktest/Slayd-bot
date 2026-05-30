@@ -60,9 +60,9 @@ BOT_TOKEN = "your_bot_token"
 ADMIN_IDS = "your_telegram_id"
 STORAGE_CHANNEL_ID = "-1001234567890"
 
-AI_PROVIDER = "openai"
-OPENAI_API_KEY = "your_openai_key"
-OPENAI_MODEL = "gpt-4o-mini"
+AI_PROVIDER = "groq"
+GROQ_API_KEY = "gsk_your_groq_key"
+GROQ_MODEL = "llama-3.1-70b-versatile"
 
 SERPER_API_KEY = "your_serper_key"
 UNSPLASH_ACCESS_KEY = "your_unsplash_key"
@@ -144,15 +144,24 @@ Data is stored as JSON files in a private Telegram channel:
 
 ### Supported Providers
 
+**Groq (RECOMMENDED - Lightning Fast!):**
+- Models: llama-3.1-70b, llama-3.1-8b, mixtral-8x7b
+- Best for: All content types
+- Speed: ⚡ 10x faster than GPT!
+- Cost: 🆓 Free tier (generous limits)
+- Get API: https://console.groq.com
+
 **OpenAI GPT:**
 - Models: gpt-4o, gpt-4o-mini, gpt-4-turbo
 - Best for: All content types
 - Cost: Pay per token
+- Get API: https://platform.openai.com/api-keys
 
 **Google Gemini:**
 - Models: gemini-pro, gemini-pro-vision
 - Best for: Long-form content
 - Cost: Free tier available
+- Get API: https://makersuite.google.com/app/apikey
 
 ### Content Quality
 
@@ -256,9 +265,17 @@ CMD ["python", "bot.py"]
 ## 📝 API Keys Required
 
 1. **Telegram Bot Token** - Free from [@BotFather](https://t.me/BotFather)
-2. **OpenAI API Key** - https://platform.openai.com/api-keys
-3. **Serper API** (optional) - https://serper.dev
-4. **Unsplash API** (optional) - https://unsplash.com/developers
+2. **Groq API Key** (RECOMMENDED) - FREE from https://console.groq.com
+3. **OpenAI API Key** (optional) - https://platform.openai.com/api-keys
+4. **Serper API** (optional) - https://serper.dev
+5. **Unsplash API** (optional) - https://unsplash.com/developers
+
+### 🚀 Why Groq?
+
+- ⚡ **10x Faster** - Lightning speed responses
+- 🆓 **Free Tier** - Generous limits
+- 🎯 **High Quality** - Llama 3.1 70B model
+- 💪 **Reliable** - Enterprise-grade infrastructure
 
 ## 🤝 Contributing
 
